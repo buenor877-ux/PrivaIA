@@ -106,3 +106,9 @@ def encontrar_cpfs(texto):
             cpfs_validos.append(candidato)
     # 4. Devolver a lista
     return cpfs_validos
+
+def encontrar_cnpjs(texto):
+    # Encontrar candidatos e devolver apenas os CNPJs válidos
+    padrao = r'(?<!\d)\d{2}\.?\d{3}\.?\d{3}/?-?\d{4}-?\d{2}(?!\d)'
+    candidatos = re.findall(padrao, texto)
+    return [candidato for candidato in candidatos if validar_cnpj(candidato)]

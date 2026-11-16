@@ -1,5 +1,5 @@
 
-from detector import encontrar_emails, validar_cpf, validar_cnpj, encontrar_telefones, validar_cartao, encontrar_cpfs
+from detector import encontrar_emails, validar_cpf, validar_cnpj, encontrar_telefones, validar_cartao, encontrar_cpfs, encontrar_cnpjs
 
 def test_texto_com_dois_emails():
     texto = "Falar com teste@example.com ou usuario@example.com"
@@ -62,5 +62,18 @@ def test_cpf_sem_pontuacao():
     assert encontrar_cpfs("CPF 12345678909") == ["12345678909"]
 
 
-def test_texto_sem_cpf():
-    assert encontrar_cpfs("texto sem cpf") == []
+def test_cnpj_nao_e_confundido_com_cpf():
+    assert encontrar_cpfs("CNPJ 11.222.333/0001-81") == []
+
+
+def test_texto_com_cnpj_valido_e_invalido():
+    texto = "Empresa 11.222.333/0001-81, outra 11.222.333/0001-80"
+    assert encontrar_cnpjs(texto) == ["11.222.333/0001-81"]
+
+
+def test_cnpj_sem_pontuacao():
+    assert encontrar_cnpjs("CNPJ 11222333000181") == ["11222333000181"]
+
+
+def test_texto_sem_cnpj():
+    assert encontrar_cnpjs("texto sem cnpj") == []
