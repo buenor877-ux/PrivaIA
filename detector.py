@@ -8,7 +8,7 @@ def encontrar_emails(texto):
 
 def encontrar_telefones(texto):
     # devolve uma lista com todos os telefones encontrados no texto
-    padrao = r'(?:\+?\d{2}\s*)?(?:\(\d{2}\)\s*)?\d{4,5}-?\d{4}'
+    padrao = r'(?<!\d)(?:\+?\d{2}\s*)?(?:\(\d{2}\)\s*)?\d{4,5}-?\d{4}(?!\d)'
     return re.findall(padrao, texto)
 
 def so_numeros(texto):

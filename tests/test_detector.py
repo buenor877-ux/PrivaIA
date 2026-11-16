@@ -38,3 +38,6 @@ def test_texto_com_dois_telefones():
 def test_texto_sem_telefone():
     assert encontrar_telefones("texto sem telefone") == []
 
+def test_numero_comprido_nao_e_telefone():
+    assert encontrar_telefones("Pedido 1234567890123") == []
+
