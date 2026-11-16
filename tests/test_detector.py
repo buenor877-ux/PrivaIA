@@ -1,5 +1,5 @@
 
-from detector import encontrar_emails, validar_cpf, validar_cnpj, encontrar_telefones, validar_cartao
+from detector import encontrar_emails, validar_cpf, validar_cnpj, encontrar_telefones, validar_cartao, encontrar_cpfs
 
 def test_texto_com_dois_emails():
     texto = "Falar com teste@example.com ou usuario@example.com"
@@ -52,3 +52,15 @@ def test_cartao_digito_errado():
 
 def test_cartao_curto_demais():
     assert validar_cartao("1234") is False
+
+def test_texto_com_cpf_valido_e_invalido():
+    texto = "Cliente CPF 123.456.789-09, outro 123.456.789-00"
+    assert encontrar_cpfs(texto) == ["123.456.789-09"]
+
+
+def test_cpf_sem_pontuacao():
+    assert encontrar_cpfs("CPF 12345678909") == ["12345678909"]
+
+
+def test_texto_sem_cpf():
+    assert encontrar_cpfs("texto sem cpf") == []

@@ -93,3 +93,16 @@ def validar_cartao(cartao):
         dobrar = not dobrar
 
     return soma % 10 == 0
+
+def encontrar_cpfs(texto):
+    # 1. Achar todos os candidatos com re.findall
+    padrao = r'(?<!\d)\d{3}\.?\d{3}\.?\d{3}-?\d{2}(?!\d)'
+    candidatos = re.findall(padrao, texto)
+    # 2. Criar uma lista vazia para os válidos
+    cpfs_validos = []
+    # 3. Para cada candidato, se validar_cpf der True, colocar na lista
+    for candidato in candidatos:
+        if validar_cpf(candidato):
+            cpfs_validos.append(candidato)
+    # 4. Devolver a lista
+    return cpfs_validos
