@@ -27,7 +27,3 @@ def validar_cpf(cpf):
     # 6. Comparar os dois com os dois últimos dígitos do CPF
     return numeros[-2:] == f'{primeiro}{segundo}'
 
-
-print(validar_cpf("123.456.789-09"))  # esperado: True
-print(validar_cpf("123.456.789-00"))  # esperado: False
-print(validar_cpf("111.111.111-11"))  # esperado: False
