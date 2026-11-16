@@ -1,3 +1,9 @@
+import re
+def encontrar_emails(texto):
+    # devolve uma lista com todos os emails encontrados no texto
+    padrao = r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+'
+    return re.findall(padrao, texto)
+
 def so_numeros(texto):
     # devolve só os dígitos do texto
     numeros = ""
