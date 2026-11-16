@@ -1,5 +1,5 @@
 
-from detector import encontrar_emails, validar_cpf, validar_cnpj, encontrar_telefones, validar_cartao, encontrar_cpfs, encontrar_cnpjs
+from detector import encontrar_emails, validar_cpf, validar_cnpj, encontrar_telefones, validar_cartao, encontrar_cpfs, encontrar_cnpjs, encontrar_cartoes
 
 def test_texto_com_dois_emails():
     texto = "Falar com teste@example.com ou usuario@example.com"
@@ -77,3 +77,12 @@ def test_cnpj_sem_pontuacao():
 
 def test_texto_sem_cnpj():
     assert encontrar_cnpjs("texto sem cnpj") == []
+
+
+def test_encontrar_cartoes():
+    texto = "Cartão válido 4111 1111 1111 1111 e inválido 4111 1111 1111 1112"
+    assert encontrar_cartoes(texto) == ["4111 1111 1111 1111"]
+
+def test_texto_sem_cartao():
+    assert encontrar_cartoes("texto sem cartao") == []
+    

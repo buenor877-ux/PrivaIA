@@ -11,6 +11,11 @@ def encontrar_telefones(texto):
     padrao = r'(?<!\d)(?:\+?\d{2}\s*)?(?:\(\d{2}\)\s*)?\d{4,5}-?\d{4}(?!\d)'
     return re.findall(padrao, texto)
 
+def encontrar_cartoes(texto):
+    candidatos = re.findall(r'(?<!\d)(?:\d[ -]?){12,18}\d(?!\d)', texto)
+    return [candidato for candidato in candidatos if validar_cartao(candidato)]
+
+
 def so_numeros(texto):
     # devolve só os dígitos do texto
     numeros = ""
@@ -98,14 +103,8 @@ def encontrar_cpfs(texto):
     # 1. Achar todos os candidatos com re.findall
     padrao = r'(?<!\d)\d{3}\.?\d{3}\.?\d{3}-?\d{2}(?!\d)'
     candidatos = re.findall(padrao, texto)
-    # 2. Criar uma lista vazia para os válidos
-    cpfs_validos = []
-    # 3. Para cada candidato, se validar_cpf der True, colocar na lista
-    for candidato in candidatos:
-        if validar_cpf(candidato):
-            cpfs_validos.append(candidato)
-    # 4. Devolver a lista
-    return cpfs_validos
+    # 2. Devolver só os candidatos que passam no validar_cpf
+    return [candidato for candidato in candidatos if validar_cpf(candidato)]
 
 def encontrar_cnpjs(texto):
     # Encontrar candidatos e devolver apenas os CNPJs válidos
