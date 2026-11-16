@@ -73,3 +73,23 @@ def validar_cnpj(cnpj):
 
     # 6. Comparar os dois com os dois últimos dígitos do CNPJ
     return numeros[-2:] == f'{primeiro}{segundo}'
+
+def validar_cartao(cartao):
+    # Deixar só os números e validar o tamanho
+    numeros = so_numeros(cartao)
+    if not 13 <= len(numeros) <= 19:
+        return False
+
+    # Aplicar o algoritmo de Luhn da direita para a esquerda
+    soma = 0
+    dobrar = False
+    for digito in reversed(numeros):
+        valor = int(digito)
+        if dobrar:
+            valor *= 2
+            if valor > 9:
+                valor -= 9
+        soma += valor
+        dobrar = not dobrar
+
+    return soma % 10 == 0
