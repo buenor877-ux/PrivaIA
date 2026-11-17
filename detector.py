@@ -1,18 +1,20 @@
 import re
 
+
 def encontrar_emails(texto):
     # devolve uma lista com todos os emails encontrados no texto
-    padrao = r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+'
+    padrao = r"[A-Za-z0-9_+.-]+@(?:[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\.)+[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*"
     return re.findall(padrao, texto)
 
 
 def encontrar_telefones(texto):
     # devolve uma lista com todos os telefones encontrados no texto
-    padrao = r'(?<!\d)(?:\+?\d{2}\s*)?(?:\(\d{2}\)\s*)?\d{4,5}-?\d{4}(?!\d)'
+    padrao = r"(?<!\d)(?:\+?\d{2}\s*)?(?:\(\d{2}\)\s*)?\d{4,5}-?\d{4}(?!\d)"
     return re.findall(padrao, texto)
 
+
 def encontrar_cartoes(texto):
-    candidatos = re.findall(r'(?<!\d)(?:\d[ -]?){12,18}\d(?!\d)', texto)
+    candidatos = re.findall(r"(?<!\d)(?:\d[ -]?){12,18}\d(?!\d)", texto)
     return [candidato for candidato in candidatos if validar_cartao(candidato)]
 
 
@@ -38,18 +40,23 @@ def validar_cpf(cpf):
         return False
 
     # 4. Calcular o 1º dígito verificador
-    soma = sum(int(digito) * peso for digito, peso in zip(numeros[:9], range(10, 1, -1)))
+    soma = sum(
+        int(digito) * peso for digito, peso in zip(numeros[:9], range(10, 1, -1))
+    )
     resto = soma % 11
     primeiro = 0 if resto < 2 else 11 - resto
 
     # 5. Calcular o 2º dígito verificador
-    soma = sum(int(digito) * peso for digito, peso in zip(numeros[:9], range(11, 2, -1)))
+    soma = sum(
+        int(digito) * peso for digito, peso in zip(numeros[:9], range(11, 2, -1))
+    )
     soma += primeiro * 2
     resto = soma % 11
     segundo = 0 if resto < 2 else 11 - resto
 
     # 6. Comparar os dois com os dois últimos dígitos do CPF
-    return numeros[-2:] == f'{primeiro}{segundo}'
+    return numeros.endswith(f"{primeiro}{segundo}")
+
 
 def validar_cnpj(cnpj):
     # 1. Deixar só os números
@@ -77,7 +84,8 @@ def validar_cnpj(cnpj):
     segundo = 0 if resto < 2 else 11 - resto
 
     # 6. Comparar os dois com os dois últimos dígitos do CNPJ
-    return numeros[-2:] == f'{primeiro}{segundo}'
+    return numeros.endswith(f"{primeiro}{segundo}")
+
 
 def validar_cartao(cartao):
     # Deixar só os números e validar o tamanho
@@ -99,15 +107,48 @@ def validar_cartao(cartao):
 
     return soma % 10 == 0
 
+
 def encontrar_cpfs(texto):
     # 1. Achar todos os candidatos com re.findall
-    padrao = r'(?<!\d)\d{3}\.?\d{3}\.?\d{3}-?\d{2}(?!\d)'
+    padrao = r"(?<!\d)\d{3}\.?\d{3}\.?\d{3}-?\d{2}(?!\d)"
     candidatos = re.findall(padrao, texto)
     # 2. Devolver só os candidatos que passam no validar_cpf
     return [candidato for candidato in candidatos if validar_cpf(candidato)]
 
+
 def encontrar_cnpjs(texto):
     # Encontrar candidatos e devolver apenas os CNPJs válidos
-    padrao = r'(?<!\d)\d{2}\.?\d{3}\.?\d{3}/?-?\d{4}-?\d{2}(?!\d)'
+    padrao = r"(?<!\d)\d{2}\.?\d{3}\.?\d{3}/?-?\d{4}-?\d{2}(?!\d)"
     candidatos = re.findall(padrao, texto)
     return [candidato for candidato in candidatos if validar_cnpj(candidato)]
+
+
+def mascarar(texto):
+    emails = encontrar_emails(texto)
+    mascarado = texto
+    marcador_por_email = {}
+    emails_por_marcador = {}
+
+    for email in emails:
+        if email not in marcador_por_email:
+            numero = len(marcador_por_email) + 1
+            marcador = f"[EMAIL_{numero}]"
+            while marcador in texto:
+                numero += 1
+                marcador = f"[EMAIL_{numero}]"
+
+            marcador_por_email[email] = marcador
+            emails_por_marcador[marcador] = email
+
+    for email in sorted(marcador_por_email, key=len, reverse=True):
+        mascarado = mascarado.replace(email, marcador_por_email[email])
+
+    return mascarado, emails_por_marcador
+
+
+def restaurar(texto, emails_por_marcador):
+    restaurado = texto
+    for marcador, email in emails_por_marcador.items():
+        restaurado = restaurado.replace(marcador, email)
+    return restaurado
+

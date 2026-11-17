@@ -1,5 +1,16 @@
+from detector import (
+    encontrar_cartoes,
+    encontrar_cnpjs,
+    encontrar_cpfs,
+    encontrar_emails,
+    encontrar_telefones,
+    mascarar,
+    restaurar,
+    validar_cartao,
+    validar_cnpj,
+    validar_cpf,
+)
 
-from detector import encontrar_emails, validar_cpf, validar_cnpj, encontrar_telefones, validar_cartao, encontrar_cpfs, encontrar_cnpjs, encontrar_cartoes
 
 def test_texto_com_dois_emails():
     texto = "Falar com teste@example.com ou usuario@example.com"
@@ -8,6 +19,7 @@ def test_texto_com_dois_emails():
 
 def test_texto_sem_email():
     assert encontrar_emails("texto sem e-mail") == []
+
 
 # Testes do CPF e CNPJ
 def test_cpf_valido():
@@ -21,14 +33,18 @@ def test_cpf_digito_errado():
 def test_cpf_todos_iguais():
     assert validar_cpf("111.111.111-11") is False
 
+
 def test_cnpj_digito_errado():
     assert validar_cnpj("11.222.333/0001-00") is False
+
 
 def test_cnpj_todos_iguais():
     assert validar_cnpj("00.000.000/0000-00") is False
 
+
 def test_cnpj_valido():
     assert validar_cnpj("11.222.333/0001-81") is True
+
 
 def test_texto_com_dois_telefones():
     texto = "Ligue (45) 99999-1234 ou 45 3264-1234"
@@ -37,6 +53,7 @@ def test_texto_com_dois_telefones():
 
 def test_texto_sem_telefone():
     assert encontrar_telefones("texto sem telefone") == []
+
 
 def test_numero_comprido_nao_e_telefone():
     assert encontrar_telefones("Pedido 1234567890123") == []
@@ -52,6 +69,7 @@ def test_cartao_digito_errado():
 
 def test_cartao_curto_demais():
     assert validar_cartao("1234") is False
+
 
 def test_texto_com_cpf_valido_e_invalido():
     texto = "Cliente CPF 123.456.789-09, outro 123.456.789-00"
@@ -83,6 +101,20 @@ def test_encontrar_cartoes():
     texto = "Cartão válido 4111 1111 1111 1111 e inválido 4111 1111 1111 1112"
     assert encontrar_cartoes(texto) == ["4111 1111 1111 1111"]
 
+
 def test_texto_sem_cartao():
     assert encontrar_cartoes("texto sem cartao") == []
-    
+
+
+def test_mascarar_email_dentro_de_outro():
+    texto = "Fale com a@exemplo.com ou aa@exemplo.com. Repito: a@exemplo.com"
+    mascarado, etiquetas = mascarar(texto)
+    assert mascarado == "Fale com [EMAIL_1] ou [EMAIL_2]. Repito: [EMAIL_1]"
+    assert etiquetas == {"[EMAIL_1]": "a@exemplo.com", "[EMAIL_2]": "aa@exemplo.com"}
+
+
+def test_restaurar_volta_ao_texto_original():
+    texto = "Fale com a@exemplo.com ou aa@exemplo.com. Repito: a@exemplo.com"
+    mascarado, etiquetas = mascarar(texto)
+    restaurado = restaurar(mascarado, etiquetas)
+    assert restaurado == texto

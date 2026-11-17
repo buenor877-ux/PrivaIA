@@ -6,3 +6,4 @@
 - [ ] **1.0 API + n8n + Docker.** Filtro como API (FastAPI) e primeiro fluxo no n8n.
 
 Usar só dados fictícios nos testes. Nunca subir dados reais para o GitHub.
+
