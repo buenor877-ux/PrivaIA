@@ -6,6 +6,7 @@ from detector import (
     encontrar_telefones,
     mascarar,
     restaurar,
+    sobrou_etiqueta,
     validar_cartao,
     validar_cnpj,
     validar_cpf,
@@ -128,3 +129,8 @@ def test_mascarar_varios_tipos():
         "[EMAIL_1]": "a@exemplo.com",
         "[CPF_1]": "123.456.789-09",
     }
+
+
+def test_sobrou_etiqueta():
+    assert sobrou_etiqueta("meu cpf é [cpf_1]") is True
+    assert sobrou_etiqueta("meu cpf é 123.456.789-09") is False

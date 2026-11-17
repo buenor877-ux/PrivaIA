@@ -162,3 +162,8 @@ def restaurar(texto, emails_por_marcador):
     for marcador, email in emails_por_marcador.items():
         restaurado = restaurado.replace(marcador, email)
     return restaurado
+
+def sobrou_etiqueta(texto):
+    # True se ainda tiver alguma etiqueta, como [CPF_1] ou [cpf_1]
+    padrao = r"\[[A-Za-z]+_\d+\]"
+    return re.search(padrao, texto) is not None
