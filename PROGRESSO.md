@@ -15,3 +15,9 @@ Testes na pasta `tests`, rodar com `python -m pytest`: ... 22 passed
 - sorted(lista, key=len, reverse=True) ordena do maior para o menor.
 - Uma função pode devolver duas coisas: texto, dicionario = funcao(...).
 - No terminal vai só o comando, sem o texto da explicação.
+- sorted(..., key=len, reverse=True) e o caso do a@ dentro de aa@;
+-guardar funções numa lista (TIPOS) e a prioridade de busca;
+-dicionário de contagem com .get(tipo, 0);
+-a chave de API vai no .env, protegido pelo .gitignore;
+-ler a última linha dos erros: 404 (modelo não existe), 503 (servidor ocupado);
+-a instrução de sistema, e por que [CPF_1] é diferente de [cpf_1].
