@@ -118,3 +118,13 @@ def test_restaurar_volta_ao_texto_original():
     mascarado, etiquetas = mascarar(texto)
     restaurado = restaurar(mascarado, etiquetas)
     assert restaurado == texto
+
+
+def test_mascarar_varios_tipos():
+    texto = "Email a@exemplo.com e CPF 123.456.789-09"
+    mascarado, etiquetas = mascarar(texto)
+    assert mascarado == "Email [EMAIL_1] e CPF [CPF_1]"
+    assert etiquetas == {
+        "[EMAIL_1]": "a@exemplo.com",
+        "[CPF_1]": "123.456.789-09",
+    }

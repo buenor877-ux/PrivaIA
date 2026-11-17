@@ -123,27 +123,38 @@ def encontrar_cnpjs(texto):
     return [candidato for candidato in candidatos if validar_cnpj(candidato)]
 
 
+TIPOS = [
+    ("EMAIL", encontrar_emails),
+    ("CPF", encontrar_cpfs),
+    ("CNPJ", encontrar_cnpjs),
+    ("TELEFONE", encontrar_telefones),
+    ("CARTAO", encontrar_cartoes),
+]
+
+
 def mascarar(texto):
-    emails = encontrar_emails(texto)
     mascarado = texto
-    marcador_por_email = {}
-    emails_por_marcador = {}
+    contagem = {}
+    dados_por_marcador = {}
+    marcador_por_dado = {}
 
-    for email in emails:
-        if email not in marcador_por_email:
-            numero = len(marcador_por_email) + 1
-            marcador = f"[EMAIL_{numero}]"
-            while marcador in texto:
-                numero += 1
-                marcador = f"[EMAIL_{numero}]"
+    for tipo, encontrar in TIPOS:
+        for dado in encontrar(texto):
+            if dado not in marcador_por_dado:
+                numero = contagem.get(tipo, 0) + 1
+                marcador = f"[{tipo}_{numero}]"
+                while marcador in texto:
+                    numero += 1
+                    marcador = f"[{tipo}_{numero}]"
 
-            marcador_por_email[email] = marcador
-            emails_por_marcador[marcador] = email
+                contagem[tipo] = numero
+                marcador_por_dado[dado] = marcador
+                dados_por_marcador[marcador] = dado
 
-    for email in sorted(marcador_por_email, key=len, reverse=True):
-        mascarado = mascarado.replace(email, marcador_por_email[email])
+    for dado in sorted(marcador_por_dado, key=len, reverse=True):
+        mascarado = mascarado.replace(dado, marcador_por_dado[dado])
 
-    return mascarado, emails_por_marcador
+    return mascarado, dados_por_marcador
 
 
 def restaurar(texto, emails_por_marcador):
@@ -151,4 +162,3 @@ def restaurar(texto, emails_por_marcador):
     for marcador, email in emails_por_marcador.items():
         restaurado = restaurado.replace(marcador, email)
     return restaurado
-
