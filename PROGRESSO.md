@@ -21,3 +21,9 @@ Testes na pasta `tests`, rodar com `python -m pytest`: ... 22 passed
 -a chave de API vai no .env, protegido pelo .gitignore;
 -ler a última linha dos erros: 404 (modelo não existe), 503 (servidor ocupado);
 -a instrução de sistema, e por que [CPF_1] é diferente de [cpf_1].
+
+## O que aprendi (Etapa 0.3)
+- gerar_hash com chave secreta (HMAC);
+- criar_tabela no SQLite;
+- registrar com ? contra SQL injection;
+- a auditoria ligada no privaia.py.
