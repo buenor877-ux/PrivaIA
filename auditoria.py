@@ -3,6 +3,7 @@ import sqlite3
 import hashlib
 import hmac
 import os
+from datetime import datetime
 from dotenv import load_dotenv
 
 
@@ -32,6 +33,22 @@ def criar_tabela():
         "impressao_digital TEXT, "
         "ia_utilizada TEXT, "
         "aviso INTEGER)"
+    )
+    conexao.commit()
+    conexao.close()
+
+
+# Crie a função registrar(tipo, dado, modelo, aviso) que:
+def registrar(tipo, dado, modelo, aviso):
+    """Registra o hash do dado e os metadados da auditoria."""
+    criar_tabela()
+    data_hora = datetime.now().isoformat(timespec="seconds")
+    impressao_digital = gerar_hash(dado)
+    conexao = sqlite3.connect(ARQUIVO)
+    conexao.execute(
+        "INSERT INTO registros (data_hora, tipo_dado, impressao_digital, ia_utilizada, aviso) "
+        "VALUES (?, ?, ?, ?, ?)",
+        (data_hora, tipo, impressao_digital, modelo, aviso),
     )
     conexao.commit()
     conexao.close()
