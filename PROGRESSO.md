@@ -27,3 +27,6 @@ Testes na pasta `tests`, rodar com `python -m pytest`: ... 22 passed
 - criar_tabela no SQLite;
 - registrar com ? contra SQL injection;
 - a auditoria ligada no privaia.py.
+- tmp_path: uma pasta temporária que o pytest cria e apaga sozinho;
+- monkeypatch no ARQUIVO, para o teste não sujar o banco de verdade;
+- SELECT com .fetchall() para ler o que foi gravado.
