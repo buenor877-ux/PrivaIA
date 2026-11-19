@@ -4,3 +4,4 @@ pip-audit
 ruff
 google-genai
 python-dotenv
+fastapi[standard]
