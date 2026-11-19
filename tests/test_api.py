@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 import api
 import privaia
-import teste.db as auditoria
+import auditoria
 
 app = api.app
 
@@ -36,7 +36,7 @@ def test_mascarar_sem_texto_da_erro():
 
 
 def test_perguntar_esconde_e_restaura(monkeypatch, tmp_path):
-    # 1. troque a CHAVE da teste.db por uma falsa          (igual ao Problema 3)
+    # 1. troque a CHAVE da auditoria por uma falsa          (igual ao Problema 3)
     monkeypatch.setattr(auditoria, "CHAVE", "chave-falsa")
 
     # 2. troque o ARQUIVO da auditoria pelo banco temporário (igual ao Problema 3)
