@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from detector import mascarar
+from privaia import perguntar_com_privacidade
+
 
 # cria a API (é ela que vai "escutar" os pedidos)
 app = FastAPI(title="PrivaIA")
@@ -25,3 +27,8 @@ def rota_mascarar(pedido: Pedido):
 
     # devolve só o texto mascarado e QUANTOS dados foram escondidos
     return {"mascarado": mascarado, "encontrados": len(etiquetas)}
+
+
+@app.post("/perguntar")
+def rota_perguntar(pedido: Pedido):
+    return {"resposta": perguntar_com_privacidade(pedido.texto)}
