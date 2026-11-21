@@ -30,3 +30,12 @@ Testes na pasta `tests`, rodar com `python -m pytest`: ... 22 passed
 - tmp_path: uma pasta temporária que o pytest cria e apaga sozinho;
 - monkeypatch no ARQUIVO, para o teste não sujar o banco de verdade;
 - SELECT com .fetchall() para ler o que foi gravado.
+
+## O que aprendi (Etapa .04)
+- API com FastAPI: @app.get e @app.post;
+- BaseModel como “formulário” do pedido;
+- TestClient para testar a API sem ligar o servidor;
+- monkeypatch para trocar uma função pela de mentira, no arquivo onde ela é usada;
+- texto entre aspas é só texto, e o Python não executa;
+- git restore arquivo desfaz as mudanças feitas desde o último commit.
+- Colocar a API do PrivaIA dentro de um container Docker, para ela rodar igual em qualquer máquina sem depender do Python e do .venv instalados no PC.
