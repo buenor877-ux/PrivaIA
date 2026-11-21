@@ -39,3 +39,9 @@ Testes na pasta `tests`, rodar com `python -m pytest`: ... 22 passed
 - texto entre aspas é só texto, e o Python não executa;
 - git restore arquivo desfaz as mudanças feitas desde o último commit.
 - Colocar a API do PrivaIA dentro de um container Docker, para ela rodar igual em qualquer máquina sem depender do Python e do .venv instalados no PC.
+- Volume é uma pasta guardada pelo Docker, fora do container. Ela sobrevive quando o container é apagado.
+- -v privaia-dados:/dados pendura o volume na pasta /dados do container.
+- -e ARQUIVO_AUDITORIA=... passa uma variável na hora de rodar e vale mais que o --env-file. O código não precisou mudar, porque o auditoria.py já lia o caminho com os.getenv.
+- O sqlite3.connect cria um arquivo vazio se o banco não existe. Por isso o primeiro erro foi no such table.
+- Só a /perguntar grava auditoria; a /mascarar não grava.
+- docker volume ls lista os volumes.
