@@ -1,0 +1,72 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "privaia",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "cc686a00-6cc3-42fa-8f9d-eea10a7bb42f",
+      "name": "Webhook",
+      "webhookId": "96b204b4-c049-4c3a-93b6-186b501e3119"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/mascarar",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "texto",
+              "value": "={{ $json.body.texto }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "e82fa833-66d4-481c-abbb-38518962423b",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "8ee1d0c9-ff8c-4e11-846f-f85ced0fa052",
+  "meta": {
+    "instanceId": "04bbfb1f3bc2f7b2af409f90ec250bcbc186dbc050352f00ea9d30691c4b85de"
+  },
+  "nodeGroups": [],
+  "id": "ItRYYSsM4Hzkp0f8",
+  "tags": []
+}
