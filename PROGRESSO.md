@@ -2,6 +2,14 @@
 
 **Etapa 0.1: concluída.** Funções no `detector.py`: ... so_numeros, validar_cpf, validar_cnpj, validar_cartao, encontrar_emails, encontrar_telefones, encontrar_cpfs e encontrar_cnpjs. Falta também a nona, encontrar_cartoes.
 Testes na pasta `tests`, rodar com `python -m pytest`: ... 22 passed
+**Etapa 0.2: concluída.** No `detector.py`: mascarar, restaurar e sobrou_etiqueta, com a lista TIPOS definindo a prioridade de busca. No `ia.py`: perguntar_ia, que chama o Gemini com a instrução de sistema. No `privaia.py`: perguntar_com_privacidade, que mascara, envia para a IA e restaura os dados na resposta.
+**Etapa 0.3: concluída.** No `auditoria.py`: gerar_hash (HMAC com a CHAVE_AUDITORIA do .env), criar_tabela e registrar. Cada dado enviado vira um registro no SQLite com data, tipo, hash, modelo e aviso, nunca o dado em si. Testes em `tests/test_auditoria.py` usando um banco temporário.
+**Etapa 0.4: concluída.** No `api.py`, uma API com FastAPI e as rotas GET `/`, POST `/mascarar` e POST `/perguntar`, testadas em `tests/test_api.py` com TestClient e uma IA de mentira. A API roda no Docker (`Dockerfile` e `.dockerignore`), com as chaves passadas por `--env-file` e a auditoria guardada no volume `privaia-dados`. O n8n chama a API por um Webhook; o fluxo está em `n8n/privaia-webhook.json`.
+
+Para rodar:
+- API: `docker build -t privaia .` e depois `docker run --rm -p 8000:8000 --env-file .env -e ARQUIVO_AUDITORIA=/dados/auditoria.db -v privaia-dados:/dados privaia`
+- n8n: `docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n`
+- Webhook: POST em `http://localhost:5678/webhook/privaia` com `{"texto": "..."}`
 
 ## O que já aprendi (Etapa 0.1)
 - Ambiente virtual (.venv) separado para cada projeto
@@ -45,3 +53,11 @@ Testes na pasta `tests`, rodar com `python -m pytest`: ... 22 passed
 - O sqlite3.connect cria um arquivo vazio se o banco não existe. Por isso o primeiro erro foi no such table.
 - Só a /perguntar grava auditoria; a /mascarar não grava.
 - docker volume ls lista os volumes.
+- n8n monta automações ligando nós; cada nó faz uma coisa.
+- O nó HTTP Request faz o mesmo que o botão Execute do /docs, só que automático.
+- Dentro de um container, localhost é o próprio container. Para chegar ao PC, usa-se host.docker.internal.
+- Webhook é um endereço que dispara o fluxo quando recebe um pedido.
+- A Test URL (/webhook-test/) aceita um pedido por clique; a Production URL (/webhook/) funciona sempre, depois de publicar.
+- {{ $json.body.texto }} é uma expressão que pega um campo do pedido que chegou.
+- Um terminal ocupado com um servidor não executa comandos; para isso, abra outro.
+- Um fluxo exportado sem credenciais pode ir para o git.
