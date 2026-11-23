@@ -1,0 +1,25 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file: .env
+    environment:
+      ARQUIVO_AUDITORIA: /dados/auditoria.db
+    volumes:
+      - privaia-dados:/dados
+
+  n8n:                                   
+    image: docker.n8n.io/n8nio/n8n       
+    ports:                                
+      - "5678:5678"                       
+    volumes:                              
+      - n8n_data:/home/node/.n8n          
+    depends_on:                           
+      - api                              
+
+volumes:
+  privaia-dados:
+    name: privaia-dados
+  n8n_data:                               
+    name: n8n_data                       

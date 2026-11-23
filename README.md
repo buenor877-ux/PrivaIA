@@ -35,7 +35,7 @@ Resposta final:   Recebido! Seu CPF é 111.444.777-35 e seu e-mail é teste@exem
 - **FastAPI**: API com as rotas `/mascarar` e `/perguntar`
 - **Google Gemini**: a IA
 - **SQLite**: auditoria
-- **Docker**: container com volume para a auditoria
+- **Docker e Docker Compose**: a API e o n8n em containers, ligados juntos com um comando
 - **n8n**: automação por Webhook chamando a API
 
 ## Como rodar
@@ -48,10 +48,15 @@ CHAVE_AUDITORIA=uma_chave_secreta_qualquer
 
 ### Com Docker
 ```bash
-docker build -t privaia .
-docker run --rm -p 8000:8000 --env-file .env -e ARQUIVO_AUDITORIA=/dados/auditoria.db -v privaia-dados:/dados privaia
+docker compose up --build
 ```
-Abra http://localhost:8000/docs para testar as rotas.
+Isso sobe a API em http://localhost:8000/docs e o n8n em http://localhost:5678.
+
+Para desligar:
+```bash
+docker compose down
+```
+Os volumes `privaia-dados` e `n8n_data` guardam a auditoria e os dados do n8n, mesmo depois do `down`.
 
 ### Sem Docker
 ```bash
@@ -69,11 +74,12 @@ python -m pytest
 ### n8n
 O fluxo está em `n8n/privaia-webhook.json`. Importe no n8n e envie um POST para `/webhook/privaia` com `{"texto": "..."}`.
 
+Dentro do Compose, o fluxo chama a API por `http://api:8000`, o nome do serviço no `docker-compose.yml`.
+
 ## Próximos passos
 
 - Detectar nomes, endereços e dados bancários
 - Suportar outras IAs além do Gemini
-- Docker Compose para subir a API e o n8n juntos
 
 ## Privacidade
 

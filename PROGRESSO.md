@@ -5,10 +5,11 @@ Testes na pasta `tests`, rodar com `python -m pytest`: ... 22 passed
 **Etapa 0.2: concluída.** No `detector.py`: mascarar, restaurar e sobrou_etiqueta, com a lista TIPOS definindo a prioridade de busca. No `ia.py`: perguntar_ia, que chama o Gemini com a instrução de sistema. No `privaia.py`: perguntar_com_privacidade, que mascara, envia para a IA e restaura os dados na resposta.
 **Etapa 0.3: concluída.** No `auditoria.py`: gerar_hash (HMAC com a CHAVE_AUDITORIA do .env), criar_tabela e registrar. Cada dado enviado vira um registro no SQLite com data, tipo, hash, modelo e aviso, nunca o dado em si. Testes em `tests/test_auditoria.py` usando um banco temporário.
 **Etapa 0.4: concluída.** No `api.py`, uma API com FastAPI e as rotas GET `/`, POST `/mascarar` e POST `/perguntar`, testadas em `tests/test_api.py` com TestClient e uma IA de mentira. A API roda no Docker (`Dockerfile` e `.dockerignore`), com as chaves passadas por `--env-file` e a auditoria guardada no volume `privaia-dados`. O n8n chama a API por um Webhook; o fluxo está em `n8n/privaia-webhook.json`.
+**Etapa 0.5: concluída.** No `docker-compose.yml`, os serviços `api` (porta 8000, com o `.env`, `ARQUIVO_AUDITORIA` e o volume `privaia-dados`) e `n8n` (porta 5678, com o volume `n8n_data`). Os volumes antigos foram reaproveitados com `name:`. O fluxo do n8n passou a chamar a API por `http://api:8000/mascarar`. Testado de ponta a ponta pelo Webhook.
 
 Para rodar:
-- API: `docker build -t privaia .` e depois `docker run --rm -p 8000:8000 --env-file .env -e ARQUIVO_AUDITORIA=/dados/auditoria.db -v privaia-dados:/dados privaia`
-- n8n: `docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n`
+- Tudo junto: `docker compose up --build` (API em http://localhost:8000/docs e n8n em http://localhost:5678)
+- Desligar: `docker compose down`
 - Webhook: POST em `http://localhost:5678/webhook/privaia` com `{"texto": "..."}`
 
 ## O que já aprendi (Etapa 0.1)
@@ -61,3 +62,16 @@ Para rodar:
 - {{ $json.body.texto }} é uma expressão que pega um campo do pedido que chegou.
 - Um terminal ocupado com um servidor não executa comandos; para isso, abra outro.
 - Um fluxo exportado sem credenciais pode ir para o git.
+
+## O que aprendi (Etapa 0.5)
+- Docker Compose liga vários containers com um só comando, no lugar de vários `docker run`.
+- O `docker-compose.yml` é escrito em YAML: `chave: valor`, indentação com espaços (nunca Tab) e `- ` para itens de lista.
+- Cada opção do `docker run` vira uma linha: `-p` vira `ports`, `--env-file` vira `env_file`, `-e` vira `environment` e `-v` vira `volumes`.
+- `build: .` monta a imagem com o meu Dockerfile; `image:` usa uma imagem pronta, como a do n8n.
+- `name:` no volume reaproveita o volume que já existia; sem ele, o Compose cria um novo com o nome da pasta na frente.
+- `docker compose config --quiet` confere o arquivo sem mostrar a chave do `.env`.
+- "port is already allocated": duas coisas não usam a mesma porta; `docker ps` mostra quem está usando e `docker stop` para.
+- Na mesma rede do Compose, um container chama o outro pelo nome do serviço (`http://api:8000`), sem `host.docker.internal`.
+- `depends_on` define a ordem de ligar os serviços.
+- `docker compose down` apaga os containers, mas os volumes continuam.
+
