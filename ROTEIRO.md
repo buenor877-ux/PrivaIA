@@ -5,6 +5,7 @@
 - [x] **0.3 Auditoria.** Histórico em SQLite com hash no lugar do dado.
 - [x] **0.4 Primeira API.**1.2 Rota /mascarar.*1.3 Testes da API.*1.4 Rota /perguntar.*1.5 Docker.*1.6 n8n.
 - [x] **0.5 Docker Compose.** API e n8n juntos com um só comando.
+- [ ] **0.6 Vitrine.** Página em Streamlit para testar o mascaramento com dados fictícios, publicada no Streamlit Cloud.
 
 Usar só dados fictícios nos testes. Nunca subir dados reais para o GitHub.
 

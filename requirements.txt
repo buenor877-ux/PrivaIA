@@ -5,3 +5,4 @@ ruff
 google-genai
 python-dotenv
 fastapi[standard]
+streamlit

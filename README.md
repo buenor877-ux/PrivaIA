@@ -6,6 +6,17 @@ Protege dados pessoais no uso de IA nas empresas.
 
 O PrivaIA fica entre as pessoas da empresa e a inteligência artificial. Antes de um texto ser enviado para uma IA, ele detecta e esconde os dados pessoais. A IA faz o trabalho dela com o texto protegido, e a resposta volta com os dados originais recolocados, sem que eles tenham saído da empresa.
 
+## Vitrine
+
+Uma página para testar o mascaramento no navegador, com dados fictícios. Ela não chama a IA e não guarda o que é digitado.
+
+![Vitrine do PrivaIA](imagens/vitrine.png)
+
+Para abrir no seu computador:
+```bash
+streamlit run vitrine.py
+```
+
 ## Como funciona
 
 ```
@@ -39,6 +50,7 @@ Resposta final:   Recebido! Seu CPF é 111.444.777-35 e seu e-mail é teste@exem
 - **SQLite**: auditoria
 - **Docker e Docker Compose**: a API e o n8n em containers, ligados juntos com um comando
 - **n8n**: automação por Webhook chamando a API
+- **Streamlit**: a vitrine para testar no navegador
 
 ## Como rodar
 
