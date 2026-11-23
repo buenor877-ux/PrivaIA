@@ -2,6 +2,8 @@
 
 Protege dados pessoais no uso de IA nas empresas.
 
+📄 [Documento completo do projeto](docs/PrivaIA-Projeto-v2.pdf)
+
 O PrivaIA fica entre as pessoas da empresa e a inteligência artificial. Antes de um texto ser enviado para uma IA, ele detecta e esconde os dados pessoais. A IA faz o trabalho dela com o texto protegido, e a resposta volta com os dados originais recolocados, sem que eles tenham saído da empresa.
 
 ## Como funciona
