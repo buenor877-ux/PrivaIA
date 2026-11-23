@@ -74,4 +74,4 @@ Para rodar:
 - Na mesma rede do Compose, um container chama o outro pelo nome do serviço (`http://api:8000`), sem `host.docker.internal`.
 - `depends_on` define a ordem de ligar os serviços.
 - `docker compose down` apaga os containers, mas os volumes continuam.
-
+- Rodei o Bandit (análise de segurança do código) e o pip-audit (falhas conhecidas nas bibliotecas): nenhum problema encontrado.
